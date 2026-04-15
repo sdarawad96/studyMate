@@ -100,18 +100,24 @@ public class StudyMateController {
     }
 
     /**
-     * Handles the Delete button click.
-     * This will be fully implemented in a later task.
+     * Deletes the currently selected study session.
+     * If no session is selected, displays a warning alert.
      */
     @FXML
     public void deleteSession() {
         if (this.selectedSession == null) {
-            System.out.println("No session selected"); // we’ll improve this later
+            javafx.scene.control.Alert alert =
+                    new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+
+            alert.setTitle("Warning");
+            alert.setHeaderText("No selection");
+            alert.setContentText("Please select a study session to delete.");
+
+            alert.showAndWait();
             return;
         }
 
         this.sessionListView.getItems().remove(this.selectedSession);
-
         this.selectedSession = null;
 
         this.dayField.clear();
