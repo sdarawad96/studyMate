@@ -30,6 +30,25 @@ public class StudyMateController {
     @FXML
     private Label subjectErrorLabel;
 
+    private StudySession selectedSession;
+
+    /**
+     * Initializes the controller by setting up the ListView selection listener.
+     */
+    @FXML
+    public void initialize() {
+        this.sessionListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    this.selectedSession = newValue;
+
+                    if (newValue != null) {
+                        this.dayField.setText(newValue.getDay());
+                        this.subjectField.setText(newValue.getSubject());
+                        this.taskField.setText(newValue.getTask());
+                    }
+                });
+    }
+
     /**
      * Handles the Add button click.
      * Validates input and adds a new StudySession to the ListView if valid.
@@ -69,7 +88,7 @@ public class StudyMateController {
      */
     @FXML
     public void deleteSession() {
-        // To be implemented later.
+        // To be implemented in Task 5.
     }
 
     /**
@@ -88,7 +107,7 @@ public class StudyMateController {
     }
 
     /**
-     * Clear all error messages from the GUI.
+     * Clears all error messages from the GUI.
      */
     private void clearErrorMessages() {
         this.dayErrorLabel.setText("");
