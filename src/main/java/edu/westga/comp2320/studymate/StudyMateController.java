@@ -88,7 +88,7 @@ public class StudyMateController {
     }
 
     /**
-     * Clears all error messages from the GUI.
+     * Clear all error messages from the GUI.
      */
     private void clearErrorMessages() {
         this.dayErrorLabel.setText("");
