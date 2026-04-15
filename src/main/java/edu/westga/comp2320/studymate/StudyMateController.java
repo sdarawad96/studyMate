@@ -88,7 +88,20 @@ public class StudyMateController {
      */
     @FXML
     public void deleteSession() {
-        // To be implemented in Task 5.
+        if (this.selectedSession == null) {
+            System.out.println("No session selected"); // we’ll improve this later
+            return;
+        }
+
+        this.sessionListView.getItems().remove(this.selectedSession);
+
+        this.selectedSession = null;
+
+        this.dayField.clear();
+        this.subjectField.clear();
+        this.taskField.clear();
+
+        this.clearErrorMessages();
     }
 
     /**
