@@ -33,7 +33,9 @@ public class StudyMateController {
     private StudySession selectedSession;
 
     /**
-     * Initializes the controller by setting up the ListView selection listener.
+     * Initializes the controller by:
+     * - Setting up the ListView selection listener to populate fields
+     * - Adding a change listener to the day field for dynamic validation
      */
     @FXML
     public void initialize() {
@@ -47,6 +49,21 @@ public class StudyMateController {
                         this.taskField.setText(newValue.getTask());
                     }
                 });
+
+        this.dayField.textProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
+            @Override
+            public void changed(javafx.beans.value.ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if (newValue.isBlank()) {
+                    dayErrorLabel.setText("");
+                } else if (!isValidDay(newValue.trim())) {
+                    dayErrorLabel.setText("must be M, T, W, R, or F");
+                } else {
+                    dayErrorLabel.setText("");
+                }
+            }
+        });
     }
 
     /**
