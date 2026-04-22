@@ -1,6 +1,7 @@
 package edu.westga.comp2320.studymate;
 
 import javafx.application.Application;
+import edu.westga.comp2320.studymate.StudyMateApplication;
 
 /**
  * Entry point for the StudyMate application.
