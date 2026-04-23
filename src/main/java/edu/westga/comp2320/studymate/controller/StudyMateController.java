@@ -2,8 +2,13 @@ package edu.westga.comp2320.studymate.controller;
 
 import edu.westga.comp2320.studymate.model.StudySession;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.beans.value.ChangeListener;
+import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 
 /**
  * Controller for the StudyMate GUI.
@@ -11,29 +16,54 @@ import javafx.beans.value.ChangeListener;
  */
 public class StudyMateController {
 
+
     @FXML
-    private TextField subjectField;
+    private CheckBox englCheck;
+
+
+    @FXML
+    private CheckBox histCheck;
+
+
+    @FXML
+    private CheckBox mathCheck;
+
+
+    @FXML
+    private CheckBox compCheck;
+
+    /**
+     * Error label shown when no subject checkbox is selected.
+     */
+    @FXML
+    private Label subjectSelectionErrorLabel;
+
 
     @FXML
     private TextField taskField;
 
+    /**
+     * ListView that displays study sessions.
+     */
     @FXML
     private ListView<StudySession> sessionListView;
 
-    @FXML
-    private Label subjectErrorLabel;
 
     @FXML
     private RadioButton mRadio;
 
+
     @FXML
     private RadioButton tRadio;
+
 
     @FXML
     private RadioButton wRadio;
 
+
     @FXML
     private RadioButton rRadio;
+
 
     @FXML
     private RadioButton fRadio;
@@ -43,17 +73,17 @@ public class StudyMateController {
      */
     private ToggleGroup dayGroup;
 
+    /**
+     * The currently selected study session.
+     */
     private StudySession selectedSession;
 
     /**
-     * Initializes the controller by setting up:
-     * - ListView selection listener
-     * - Radio button toggle group
-     * - Default selected day (Monday)
+     * Initializes the controller by setting up the radio buttons,
+     * clearing error messages, and wiring the ListView selection listener.
      */
     @FXML
     public void initialize() {
-
         this.dayGroup = new ToggleGroup();
 
         this.mRadio.setToggleGroup(this.dayGroup);
@@ -65,44 +95,80 @@ public class StudyMateController {
         this.mRadio.setSelected(true);
         this.mRadio.requestFocus();
 
+        this.clearErrorMessages();
+
         this.sessionListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     this.selectedSession = newValue;
 
                     if (newValue != null) {
-                        this.subjectField.setText(newValue.getSubject());
                         this.taskField.setText(newValue.getTask());
                         this.selectDayRadioButton(newValue.getDay());
+                        this.selectSubjectCheckBox(newValue.getSubject());
                     } else {
-                        this.subjectField.clear();
                         this.taskField.clear();
                         this.mRadio.setSelected(true);
+                        this.clearSubjectCheckBoxes();
                     }
                 });
     }
 
     /**
-     * Adds a new study session based on user input.
-     * Validates subject input before adding.
+     * Adds a new study session for each selected subject checkbox.
+     * If no subject is selected, an error message is shown.
      */
     @FXML
     public void addSession() {
-
         this.clearErrorMessages();
 
-        String subject = this.subjectField.getText().trim();
         String task = this.taskField.getText().trim();
         String day = this.getSelectedDay();
 
-        if (subject.isBlank()) {
-            this.subjectErrorLabel.setText("required");
+        boolean hasSelection = this.englCheck.isSelected()
+                || this.histCheck.isSelected()
+                || this.mathCheck.isSelected()
+                || this.compCheck.isSelected();
+
+        if (!hasSelection) {
+            this.subjectSelectionErrorLabel.setText("select at least one subject");
             return;
         }
 
-        StudySession newSession = new StudySession(day, subject, task);
+        StudySession firstAddedSession = null;
 
-        this.sessionListView.getItems().add(newSession);
-        this.sessionListView.getSelectionModel().select(newSession);
+        if (this.englCheck.isSelected()) {
+            StudySession newSession = new StudySession(day, "ENGL", task);
+            this.sessionListView.getItems().add(newSession);
+            if (firstAddedSession == null) {
+                firstAddedSession = newSession;
+            }
+        }
+
+        if (this.histCheck.isSelected()) {
+            StudySession newSession = new StudySession(day, "HIST", task);
+            this.sessionListView.getItems().add(newSession);
+            if (firstAddedSession == null) {
+                firstAddedSession = newSession;
+            }
+        }
+
+        if (this.mathCheck.isSelected()) {
+            StudySession newSession = new StudySession(day, "MATH", task);
+            this.sessionListView.getItems().add(newSession);
+            if (firstAddedSession == null) {
+                firstAddedSession = newSession;
+            }
+        }
+
+        if (this.compCheck.isSelected()) {
+            StudySession newSession = new StudySession(day, "COMP", task);
+            this.sessionListView.getItems().add(newSession);
+            if (firstAddedSession == null) {
+                firstAddedSession = newSession;
+            }
+        }
+
+        this.sessionListView.getSelectionModel().select(firstAddedSession);
     }
 
     /**
@@ -125,22 +191,29 @@ public class StudyMateController {
         this.selectedSession = null;
 
         this.mRadio.setSelected(true);
-        this.subjectField.clear();
         this.taskField.clear();
-
+        this.clearSubjectCheckBoxes();
         this.clearErrorMessages();
     }
 
     /**
      * Returns the selected day from the radio buttons.
      *
-     * @return the selected day code (M, T, W, R, or F)
+     * @return the selected day code
      */
     private String getSelectedDay() {
-        if (this.mRadio.isSelected()) return "M";
-        if (this.tRadio.isSelected()) return "T";
-        if (this.wRadio.isSelected()) return "W";
-        if (this.rRadio.isSelected()) return "R";
+        if (this.mRadio.isSelected()) {
+            return "M";
+        }
+        if (this.tRadio.isSelected()) {
+            return "T";
+        }
+        if (this.wRadio.isSelected()) {
+            return "W";
+        }
+        if (this.rRadio.isSelected()) {
+            return "R";
+        }
         return "F";
     }
 
@@ -168,13 +241,50 @@ public class StudyMateController {
                 break;
             default:
                 this.mRadio.setSelected(true);
+                break;
         }
+    }
+
+    /**
+     * Selects the checkbox matching the subject of the selected study session.
+     *
+     * @param subject the subject to select
+     */
+    private void selectSubjectCheckBox(String subject) {
+        this.clearSubjectCheckBoxes();
+
+        switch (subject) {
+            case "ENGL":
+                this.englCheck.setSelected(true);
+                break;
+            case "HIST":
+                this.histCheck.setSelected(true);
+                break;
+            case "MATH":
+                this.mathCheck.setSelected(true);
+                break;
+            case "COMP":
+                this.compCheck.setSelected(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Clears all subject checkboxes.
+     */
+    private void clearSubjectCheckBoxes() {
+        this.englCheck.setSelected(false);
+        this.histCheck.setSelected(false);
+        this.mathCheck.setSelected(false);
+        this.compCheck.setSelected(false);
     }
 
     /**
      * Clears all error messages.
      */
     private void clearErrorMessages() {
-        this.subjectErrorLabel.setText("");
+        this.subjectSelectionErrorLabel.setText("");
     }
 }
