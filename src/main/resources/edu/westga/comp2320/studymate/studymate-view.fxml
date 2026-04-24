@@ -39,28 +39,15 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Task:" GridPane.rowIndex="5">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="taskField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addSession" text="Add">
+                  <Label text="Subject:">
                      <font>
                         <Font size="14.0" />
                      </font>
-                  </Button>
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteSession" text="Delete">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
+                  </Label>
                </children>
             </HBox>
-            <Label fx:id="dayErrorLabel" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="subjectErrorLabel" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <children>
                   <RadioButton fx:id="mRadio" mnemonicParsing="false" text="M" />
@@ -70,6 +57,8 @@
                   <RadioButton fx:id="fRadio" mnemonicParsing="false" text="F" />
                </children>
             </HBox>
+            <Label fx:id="dayErrorLabel" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="subjectErrorLabel" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <CheckBox fx:id="englCheck" mnemonicParsing="false" prefHeight="15.0" prefWidth="52.0" text="ENGL">
@@ -82,15 +71,6 @@
                         <Font size="10.0" />
                      </font>
                   </CheckBox>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
-               <children>
-                  <Label text="Subject:">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -111,20 +91,49 @@
                <font>
                   <Font size="10.0" />
                </font></Label>
+            <Label text="Task:" GridPane.rowIndex="5">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <TextField fx:id="taskField" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#addSession" text="Add">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteSession" text="Delete">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </GridPane>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu text="_File">
+                  <items>
+                    <MenuItem fx:id="saveMenueItem" onAction="#saveSessions" text="_Save">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </HBox>
       <ListView fx:id="sessionListView" layoutX="298.0" layoutY="16.0" prefHeight="200.0" prefWidth="200.0" />
-      <MenuBar layoutY="4.0">
-        <menus>
-          <Menu text="_File">
-            <items>
-              <MenuItem fx:id="saveMenueItem" onAction="#saveSessions" text="_Save">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator></MenuItem>
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
    </children>
 </AnchorPane>
