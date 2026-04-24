@@ -10,6 +10,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.util.*;
+
 /**
  * Controller for the StudyMate GUI.
  * Handles adding, deleting, selecting, and validating study sessions.
@@ -195,6 +202,56 @@ public class StudyMateController {
         this.clearSubjectCheckBoxes();
         this.clearErrorMessages();
     }
+    /**
+     * Saves all study sessions to a file grouped by day.
+     */
+    @FXML
+    public void saveSessions() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Study Sessions");
+
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file == null) {
+            return;
+        }
+
+        try (PrintWriter writer = new PrintWriter(file)) {
+
+            // Group sessions by day
+            Map<String, List<StudySession>> grouped = new LinkedHashMap<>();
+            grouped.put("M", new ArrayList<>());
+            grouped.put("T", new ArrayList<>());
+            grouped.put("W", new ArrayList<>());
+            grouped.put("R", new ArrayList<>());
+            grouped.put("F", new ArrayList<>());
+
+            for (StudySession session : this.sessionListView.getItems()) {
+                grouped.get(session.getDay()).add(session);
+            }
+
+            // Write to file
+            for (String day : grouped.keySet()) {
+
+                List<StudySession> sessions = grouped.get(day);
+
+                if (!sessions.isEmpty()) {
+
+                    writer.println(getFullDayName(day));
+
+                    for (StudySession s : sessions) {
+                        writer.println(s.getSubject() + " - " + s.getTask());
+                    }
+
+                    writer.println(); // blank line between days
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Returns the selected day from the radio buttons.
@@ -215,6 +272,19 @@ public class StudyMateController {
             return "R";
         }
         return "F";
+    }
+    /**
+     * Converts day code to full name.
+     */
+    private String getFullDayName(String day) {
+        switch (day) {
+            case "M": return "Monday";
+            case "T": return "Tuesday";
+            case "W": return "Wednesday";
+            case "R": return "Thursday";
+            case "F": return "Friday";
+            default: return "";
+        }
     }
 
     /**
@@ -287,4 +357,6 @@ public class StudyMateController {
     private void clearErrorMessages() {
         this.subjectSelectionErrorLabel.setText("");
     }
+
+
 }
