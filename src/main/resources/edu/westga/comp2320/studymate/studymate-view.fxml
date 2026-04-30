@@ -117,7 +117,7 @@
             </HBox>
          </children>
       </GridPane>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="25.0" prefWidth="52.0">
          <children>
             <MenuBar>
               <menus>
